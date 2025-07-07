@@ -1,5 +1,6 @@
 import os
 import time
+import json
 
 from pathlib import Path
 
@@ -36,7 +37,7 @@ def translate_text(client, target_language, source_language, text):
 
 class RagChain:
     def __init__(self, data_folder_name, pc_index_name, pinecone_api_key, google_api_key,
-                 translate_client_config_file_path):
+                 google_translate_config):
         self.data_folder_path = get_folder_path(data_folder_name)
         self.embedding_model = FastEmbedEmbeddings()
         self.vector_store = self.process_vector_store(pinecone_api_key, pc_index_name)
@@ -74,7 +75,7 @@ Assistant:
             chain_type_kwargs={"prompt": self.prompt_template},
         )
         try:
-            self.google_translate_client = translate.Client.from_service_account_json(translate_client_config_file_path)
+            self.google_translate_client = translate.Client.from_service_account_info(json.loads(google_translate_config))
         except Exception as e:
             raise ValueError(f"Failed to initialize Google Translate client: {e}")
 

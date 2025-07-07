@@ -74,3 +74,4 @@ local_settings.py
 
 rgd_data
 key.json
+.streamlit/secrets.toml
